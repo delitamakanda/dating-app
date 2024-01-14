@@ -62,3 +62,20 @@ swiper_id (Foreign Key referencing Users)
 swiped_user_id (Foreign Key referencing Users)
 swipe_type (Like, Dislike)
 timestamp
+
+
+## install go
+
+```bash
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+``` 
+
+## start server 
+
+```bash
+cd backend
+go build .
+./main
+```
