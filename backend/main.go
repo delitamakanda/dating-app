@@ -47,6 +47,7 @@ func (my myHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		Value:   "123",
 		Expires: time.Now().Add(time.Hour * 24 * 365),
 	})
+	w.WriteHeader(http.StatusAccepted)
 	fmt.Fprintln(w, string(my))
 	fmt.Fprintln(w, r.Header)
 }
