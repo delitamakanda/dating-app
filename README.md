@@ -79,3 +79,9 @@ cd backend
 go build .
 ./main
 ```
+
+
+### start server with tls
+```bash
+go run /usr/local/go/src/crypto/tls/generate_cert.go --host localhost
+```
