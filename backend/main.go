@@ -20,6 +20,8 @@ func main() {
 	http.Handle("/api/photos/", myHandler("Photos service"))
 	http.Handle("/api/swipes/", myHandler("Swipes service"))
 
+	http.Handle("/files/", http.StripPrefix("/files/", http.FileServer(http.Dir("."))))
+
 	// serve content
 	http.HandleFunc("/servecontent", func(w http.ResponseWriter, r *http.Request) {
 		customerFile, err := os.Open("./customers.csv")
