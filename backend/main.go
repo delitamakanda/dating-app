@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -17,6 +19,37 @@ func main() {
 	http.Handle("/api/matches/", myHandler("Matches service"))
 	http.Handle("/api/photos/", myHandler("Photos service"))
 	http.Handle("/api/swipes/", myHandler("Swipes service"))
+
+	// serve content
+	http.HandleFunc("/servecontent", func(w http.ResponseWriter, r *http.Request) {
+		customerFile, err := os.Open("./customers.csv")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer customerFile.Close()
+
+		http.ServeContent(w, r, "customersdata.csv", time.Now(), customerFile)
+	})
+
+	// serve file to download
+	http.HandleFunc("/servefile", func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, "./customers.csv")
+	})
+
+	// read file
+	http.HandleFunc("/fprint", func(w http.ResponseWriter, r *http.Request) {
+		customerFile, err := os.Open("customers.csv")
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer customerFile.Close()
+		// data, err := io.ReadAll(customerFile)
+		// if err != nil {
+		// log.Fatal(err)
+		// }
+		// fmt.Fprint(w, string(data))
+		io.Copy(w, customerFile)
+	})
 
 	var handlerFunc http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintln(w, r.URL.String())
